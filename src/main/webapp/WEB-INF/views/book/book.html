@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Показать книгу ' + ${book.getName()} + ' ' + ${book.getAuthor()} + ' ' + ${book.getYear()}">Book</title>
+</head>
+<body>
+<div>
+  <p th:text="'Книга ' + ${book.getName()} + ' ' + ${book.getAuthor()} + ' ' + ${book.getYear()}">Hello!!!!</p>
+</div>
+<hr/>
+<form th:method="PATCH" th:action="@{/books/{id}(id=${book.getId()})}" th:object="${book}">
+  <input type="hidden" th:field="*{name}"/>
+  <input type="hidden" th:field="*{author}"/>
+  <input type="hidden" th:field="*{year}"/>
+  <input type="submit" value="Редактировать книгу">
+</form>
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}" th:object="${book}">
+  <input type="hidden" th:field="*{name}"/>
+  <input type="hidden" th:field="*{author}"/>
+  <input type="hidden" th:field="*{year}"/>
+  <input type="submit" value="Удалить книгу">
+</form>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="'Показать читателя ' + ${person.getName()} + ' ' + ${person.getYear()}">Book</title>
+</head>
+<body>
+<div>
+  <p th:text="'Читатель ' + ${person.getName()} + ' ' + ${person.getYear()}">Hello!!!!</p>
+</div>
+<hr/>
+<form th:method="POST" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
+  <input type="hidden" th:field="*{name}"/>
+  <input type="hidden" th:field="*{year}"/>
+  <input type="submit" value="Редактировать читателя">
+</form>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
+  <input type="hidden" th:field="*{name}"/>
+  <input type="hidden" th:field="*{year}"/>
+  <input type="submit" value="Удалить читателя">
+</form>
+</body>
+</html>
