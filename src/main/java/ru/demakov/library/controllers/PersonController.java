@@ -3,11 +3,13 @@ package ru.demakov.library.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.demakov.library.dao.PersonDao;
 import ru.demakov.library.model.Book;
 import ru.demakov.library.model.Person;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -44,7 +46,10 @@ public class PersonController {
     }
 
     @PostMapping("/new")
-    private String addPerson(@ModelAttribute("person") Person person) {
+    private String addPerson(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "person/new";
+        }
         personDao.create(person);
         return "redirect:/people";
     }
@@ -55,7 +60,10 @@ public class PersonController {
     }
 
     @PatchMapping("/{id}")
-    private String editPerson(@ModelAttribute("person") Person person, @PathVariable("id") int id) {
+    private String editPerson(@ModelAttribute("person") Person person, @PathVariable("id") int id, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "person/edit";
+        }
         personDao.edit(id, person);
         return "redirect:/people";
     }
