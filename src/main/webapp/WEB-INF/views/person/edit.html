@@ -5,8 +5,7 @@
   <title>Edit Person</title>
 </head>
 <body>
-<form th:method="PATCH" th:action="@{/people/${person.getId()}/edit}" th:object="${person}">
-  <input type="hidden" th:field="*{id}" id="id"/>
+<form th:method="PATCH" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
   <label for="name">ФИО </label>
   <input type="text" th:field="*{name}" id="name"/>
   <br/>

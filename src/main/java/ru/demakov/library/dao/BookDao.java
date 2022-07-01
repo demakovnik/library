@@ -41,12 +41,28 @@ public class BookDao {
                 book.getName(), book.getAuthor(),book.getYear());
     }
 
-    public void edit(Book book) {
+    public void edit(int id, Book book) {
         jdbcTemplate.update("UPDATE Book SET name=?,author=?,year=? WHERE id=?",
-                book.getName(), book.getAuthor(),book.getYear(), book.getId());
+                book.getName(), book.getAuthor(),book.getYear(), id);
     }
 
     public void delete(int id) {
-        jdbcTemplate.update("DELETE FROM BOOK WHERE id=?", id);
+        jdbcTemplate.update("DELETE FROM Book WHERE id=?", id);
     }
+
+    public void assign(int bookId, int personId) {
+        jdbcTemplate.update("UPDATE Book SET person_id=? WHERE id=?", personId, bookId);
+    }
+
+    public void release(int bookId) {
+        jdbcTemplate.update("UPDATE Book SET person_id=NULL WHERE id=?", bookId);
+    }
+
+    public Optional<Person> getPersonById(int id) {
+        return jdbcTemplate.query("SELECT Person.* FROM Book JOIN Person ON Book.person_id = Person.id WHERE Book.id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Person.class))
+                .stream()
+                .findAny();
+    }
+
+
 }

@@ -8,15 +8,22 @@
 <div>
   <p th:text="'Читатель ' + ${person.getName()} + ' ' + ${person.getYear()}">Hello!!!!</p>
 </div>
+
+<div th:if="${books.isEmpty()}">
+  <p>Человек пока не взял ни одной книги</p>
+</div>
+
+<div th:if="${!books.isEmpty()}">
+  <h2>Книги:</h2>
+  <p th:each="book : ${books}" th:text="${book.getName()} + ' ' + ${book.author} + ' ' + ${book.getYear()}"></p>
+</div>
 <hr/>
-<form th:method="POST" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
+<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}" th:object="${person}">
   <input type="hidden" th:field="*{name}"/>
   <input type="hidden" th:field="*{year}"/>
   <input type="submit" value="Редактировать читателя">
 </form>
-<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
-  <input type="hidden" th:field="*{name}"/>
-  <input type="hidden" th:field="*{year}"/>
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
   <input type="submit" value="Удалить читателя">
 </form>
 </body>

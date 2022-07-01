@@ -8,17 +8,36 @@
 <div>
   <p th:text="'Книга ' + ${book.getName()} + ' ' + ${book.getAuthor()} + ' ' + ${book.getYear()}">Hello!!!!</p>
 </div>
+
+<div th:if="${owner}">
+  <span>Книга сейчас у: </span> <span th:text="${owner.getName()}">Person Name</span>
+  <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
+    <input type="submit" value="Освободить книгу"/>
+  </form>
+</div>
+
+<div th:if="${people}">
+  <span>Эта книга свободна. Кому назначить ее?</span>
+  <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
+    <label for="person">Выберите человека</label>
+    <select th:object="${person}" th:field="*{id}" id="person">
+      <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getName()}">
+      </option>
+    </select>
+    <input type="submit" value="Назначить книгу"/>
+  </form>
+</div>
+
 <hr/>
-<form th:method="PATCH" th:action="@{/books/{id}(id=${book.getId()})}" th:object="${book}">
+
+
+<form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}" th:object="${book}">
   <input type="hidden" th:field="*{name}"/>
   <input type="hidden" th:field="*{author}"/>
   <input type="hidden" th:field="*{year}"/>
   <input type="submit" value="Редактировать книгу">
 </form>
-<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}" th:object="${book}">
-  <input type="hidden" th:field="*{name}"/>
-  <input type="hidden" th:field="*{author}"/>
-  <input type="hidden" th:field="*{year}"/>
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
   <input type="submit" value="Удалить книгу">
 </form>
 

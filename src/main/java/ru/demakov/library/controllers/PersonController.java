@@ -5,7 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.demakov.library.dao.PersonDao;
+import ru.demakov.library.model.Book;
 import ru.demakov.library.model.Person;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/people")
@@ -19,20 +22,22 @@ public class PersonController {
     }
 
     @GetMapping
-    public String getPeople(Model model) {
+    private String getPeople(Model model) {
         model.addAttribute("people", personDao.getAll());
         return "person/people";
     }
 
     @GetMapping("/{id}")
-    public String showPerson(@PathVariable int id, Model model) {
+    private String showPerson(@PathVariable int id, Model model) {
         Person person = personDao.getPerson(id);
+        List<Book> booksByPersonId = personDao.getBooksByPersonId(id);
+        model.addAttribute("books", booksByPersonId);
         model.addAttribute("person", person);
         return "person/person";
     }
 
     @GetMapping("/new")
-    public String addPerson(Model model) {
+    private String addPerson(Model model) {
         Person person = new Person();
         model.addAttribute("person", person);
         return "person/new";
@@ -44,20 +49,18 @@ public class PersonController {
         return "redirect:/people";
     }
 
-    @PostMapping("/{id}")
-    private String editPerson(@PathVariable("id") int id, Model model) {
-        Person person = personDao.getPerson(id);
-        model.addAttribute("person", person);
+    @GetMapping("/{id}/edit")
+    private String editPerson(@ModelAttribute("person") Person person) {
         return "person/edit";
     }
 
-    @PatchMapping("/{id}/edit")
-    public String editPerson(@ModelAttribute("person") Person person) {
-        personDao.edit(person);
+    @PatchMapping("/{id}")
+    private String editPerson(@ModelAttribute("person") Person person, @PathVariable("id") int id) {
+        personDao.edit(id, person);
         return "redirect:/people";
     }
     @DeleteMapping("/{id}")
-    public String deletePerson(@PathVariable("id") int id) {
+    private String deletePerson(@PathVariable("id") int id) {
         personDao.delete(id);
         return "redirect:/people";
     }
